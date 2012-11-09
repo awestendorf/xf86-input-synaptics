@@ -652,7 +652,25 @@ EventReadHwState(InputInfoPtr pInfo,
             v = (ev.value ? TRUE : FALSE);
             switch (ev.code) {
             case BTN_LEFT:
-                hw->left = v;
+                /**
+                 * Filter spurious events from the kernel in cases where
+                 * chassis flex causes it to send a button press event.
+                 * Ignore clickpad events if nothing was pressed or using 
+                 * !=1 finger with click pressure. There is still a case
+                 * where resting a finger on the pad and a palm press on the
+                 * keyboard rest will trigger an event and that will pass
+                 * pass through this filter. TBD on best course of action to 
+                 * filter that out, because we want to recognize press events
+                 * to allow mouse movement, but not register as a click. The
+                 * old FingerPress option seems like the right choice but
+                 * it's been deprecated. Filtering that out could require
+                 * complicated heuristics, so for now do a reasonable job
+                 * by insisting that the pressure be at least the value
+                 * of FingerHigh.
+                 */
+                if (para->clickpad!=1 || (hw->numFingers==1 && hw->z >= para->finger_high)) {
+                  hw->left = v;
+                }
                 break;
             case BTN_RIGHT:
                 hw->right = v;
