@@ -141,6 +141,7 @@ typedef struct _SynapticsParameters {
     int tap_time_2;             /* max. tapping time for double taps */
     int click_time;             /* The duration of a single click */
     Bool clickpad;              /* Device is a has integrated buttons */
+    int click_high;              /* Optional clickpad pressure before a click is registered */
     int emulate_mid_button_time;        /* Max time between left and right button presses to
                                            emulate a middle button press. */
     int emulate_twofinger_z;    /* pressure threshold to emulate two finger touch (for Alps) */

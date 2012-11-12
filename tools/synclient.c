@@ -132,6 +132,7 @@ static struct Parameter params[] = {
     {"HorizHysteresis",       PT_INT,    0, 10000, SYNAPTICS_PROP_NOISE_CANCELLATION, 32,	0},
     {"VertHysteresis",        PT_INT,    0, 10000, SYNAPTICS_PROP_NOISE_CANCELLATION, 32,	1},
     {"ClickPad",              PT_BOOL,   0, 1,     SYNAPTICS_PROP_CLICKPAD,	8,	0},
+    {"ClickHigh",             PT_INT,    0, 255,     SYNAPTICS_PROP_CLICKHIGH,	32,	0},
     {"RightButtonAreaLeft",   PT_INT, INT_MIN, INT_MAX, SYNAPTICS_PROP_SOFTBUTTON_AREAS,	32,	0},
     {"RightButtonAreaRight",  PT_INT, INT_MIN, INT_MAX, SYNAPTICS_PROP_SOFTBUTTON_AREAS,	32,	1},
     {"RightButtonAreaTop",    PT_INT, INT_MIN, INT_MAX, SYNAPTICS_PROP_SOFTBUTTON_AREAS,	32,	2},
