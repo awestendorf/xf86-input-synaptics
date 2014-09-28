@@ -58,6 +58,7 @@ Atom prop_tap_time = 0;
 Atom prop_tap_move = 0;
 Atom prop_tap_durations = 0;
 Atom prop_clickpad = 0;
+Atom prop_click_high = 0;
 Atom prop_middle_timeout = 0;
 Atom prop_twofinger_pressure = 0;
 Atom prop_twofinger_width = 0;
@@ -216,6 +217,8 @@ InitDeviceProperties(InputInfoPtr pInfo)
         InitAtom(pInfo->dev, SYNAPTICS_PROP_TAP_DURATIONS, 32, 3, values);
     prop_clickpad =
         InitAtom(pInfo->dev, SYNAPTICS_PROP_CLICKPAD, 8, 1, &para->clickpad);
+    prop_click_high =
+        InitAtom(pInfo->dev, SYNAPTICS_PROP_CLICKHIGH, 32, 1, &para->click_high);
     prop_middle_timeout =
         InitAtom(pInfo->dev, SYNAPTICS_PROP_MIDDLE_TIMEOUT, 32, 1,
                  &para->emulate_mid_button_time);
@@ -445,6 +448,12 @@ SetProperty(DeviceIntPtr dev, Atom property, XIPropertyValuePtr prop,
         }
 
         para->clickpad = *(BOOL *) prop->data;
+    }
+    else if (property == prop_click_high) {
+        if (prop->size != 1 || prop->format != 32 || prop->type != XA_INTEGER)
+            return BadMatch;
+
+        para->click_high = *(INT32 *) prop->data;
     }
     else if (property == prop_middle_timeout) {
         if (prop->size != 1 || prop->format != 32 || prop->type != XA_INTEGER)

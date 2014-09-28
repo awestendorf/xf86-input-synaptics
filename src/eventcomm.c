@@ -652,7 +652,19 @@ EventReadHwState(InputInfoPtr pInfo,
             v = (ev.value ? TRUE : FALSE);
             switch (ev.code) {
             case BTN_LEFT:
-                hw->left = v;
+                /**
+                 * Filter spurious events from the kernel in cases where
+                 * chassis flex causes it to send a button press event if
+                 * ClickHigh is set.
+                 */
+                /*if (v==TRUE && para->clickpad==1) {
+                  if (hw->z >= para->click_high || para->click_high==0) {
+                    hw->left = v;
+                  }
+                }
+                else if(v==FALSE || para->clickpad!=1) {
+                  hw->left = v;
+                }*/
                 break;
             case BTN_RIGHT:
                 hw->right = v;
@@ -716,6 +728,14 @@ EventReadHwState(InputInfoPtr pInfo,
                     break;
                 case ABS_PRESSURE:
                     hw->z = ev.value;
+                    if( hw->numFingers==1 ) {
+                      if (hw->z >= para->click_high) {
+                        hw->left = TRUE;
+                      }
+                      else { //if( hw->z <= 5 ) {
+                        hw->left = FALSE;
+                      }
+                    }
                     break;
                 case ABS_TOOL_WIDTH:
                     hw->fingerWidth = ev.value;

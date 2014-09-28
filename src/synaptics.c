@@ -629,6 +629,7 @@ set_default_parameters(InputInfoPtr pInfo)
     pars->tap_time_2 = xf86SetIntOption(opts, "MaxDoubleTapTime", 180);
     pars->click_time = xf86SetIntOption(opts, "ClickTime", 100);
     pars->clickpad = xf86SetBoolOption(opts, "ClickPad", pars->clickpad);       /* Probed */
+    pars->click_high = xf86SetIntOption(opts, "ClickHigh", 0);       /* Disabled by default */
     /* middle mouse button emulation on a clickpad? nah, you're joking */
     middle_button_timeout = pars->clickpad ? 0 : 75;
     pars->emulate_mid_button_time =
