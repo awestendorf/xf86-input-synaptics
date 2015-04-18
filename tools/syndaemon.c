@@ -500,9 +500,11 @@ dp_get_device(Display * dpy)
             if (verbose > 0) {
                 fprintf(stderr, "  touchpad: %s\n", info[ndevices].name);
             }
-            if (device_name != NULL && strstr(info[ndevices].name, device_name) == NULL) {
+            if (device_name != NULL && 
+                strstr(info[ndevices].name, device_name) == NULL) {
                 if (verbose > 0) {
-                    fprintf(stderr, "  it doesn't match the device name given (-s)");
+                    fprintf(stderr, "  it doesn't match the device name given "
+                            "(-s \"%s\")\n", device_name);
                 }
                 continue;
             }
