@@ -65,6 +65,7 @@ static Atom touchpad_off_prop;
 static enum TouchpadState previous_state;
 static enum TouchpadState disable_state = TouchpadOff;
 static int verbose;
+static char *device_name = NULL;
 
 #define KEYMAP_SIZE 32
 static unsigned char keyboard_mask[KEYMAP_SIZE];
@@ -87,6 +88,8 @@ usage(void)
             "  -k Ignore modifier keys when monitoring keyboard activity.\n");
     fprintf(stderr, "  -K Like -k but also ignore Modifier+Key combos.\n");
     fprintf(stderr, "  -R Use the XRecord extension.\n");
+    fprintf(stderr, "  -s Touchpad device name to match.\n");
+    fprintf(stderr, "     (default is to match first touchpad)\n");
     fprintf(stderr, "  -v Print diagnostic messages.\n");
     exit(1);
 }
@@ -494,6 +497,18 @@ dp_get_device(Display * dpy)
 
     while (ndevices--) {
         if (info[ndevices].type == touchpad_type) {
+            if (verbose > 0) {
+                fprintf(stderr, "  touchpad: %s\n", info[ndevices].name);
+            }
+            if (device_name != NULL && 
+                strstr(info[ndevices].name, device_name) == NULL) {
+                if (verbose > 0) {
+                    fprintf(stderr, "  it doesn't match the device name given "
+                            "(-s \"%s\")\n", device_name);
+                }
+                continue;
+            }
+
             dev = XOpenDevice(dpy, info[ndevices].id);
             if (!dev) {
                 fprintf(stderr, "Failed to open device '%s'.\n",
@@ -546,7 +561,7 @@ main(int argc, char *argv[])
     int use_xrecord = 0;
 
     /* Parse command line parameters */
-    while ((c = getopt(argc, argv, "i:m:dtp:kKR?v")) != EOF) {
+    while ((c = getopt(argc, argv, "i:m:dtp:kKR?s:v")) != EOF) {
         switch (c) {
         case 'i':
             idle_time = atof(optarg);
@@ -572,6 +587,9 @@ main(int argc, char *argv[])
             break;
         case 'R':
             use_xrecord = 1;
+            break;
+        case 's':
+            device_name = strdup(optarg);
             break;
         case 'v':
             verbose = 1;
